@@ -3,11 +3,12 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 class IsAdminOrIfAuthenticatedReadOnly(BasePermission):
     """
-    Адмін (is_staff=True) → повний доступ.
-    Автентифікований не-адмін → лише SAFE_METHODS (GET/HEAD/OPTIONS).
-    Анонім → теж лише SAFE_METHODS.
+    Admin (is_staff=True): повний доступ.
+    Автентифікований не-адмін: лише SAFE_METHODS.
+    Анонім: заборонено все (включно з SAFE_METHODS).
     """
     def has_permission(self, request, view):
+        user = request.user
         if request.method in SAFE_METHODS:
-            return True
-        return bool(request.user and request.user.is_staff)
+            return bool(user and user.is_authenticated)
+        return bool(user and user.is_staff)
