@@ -47,7 +47,21 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "cinema",
     "user",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "user",
+    "cinema",
 ]
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASS": (
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
