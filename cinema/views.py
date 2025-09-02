@@ -91,3 +91,4 @@ class OrderViewSet(mixins.ListModelMixin,
 
     def perform_create(self, serializer):
         serializer.save()  # user встановлюється в serializer.create()
+bb
