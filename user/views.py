@@ -20,14 +20,13 @@ class LoginView(ObtainAuthToken):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        user = self.serializer_class(
-            data=request.data, context={"request": request}
+        serializer = self.serializer_class(
+            data=request.data,
+            context={"request": request},
         )
-        user.is_valid(raise_exception=True)
-        token, _ = Token.objects.get_or_create(
-            user=user.validated_data["user"]
-        )
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        token, _ = Token.objects.get_or_create(user=user)
         return Response({"token": token.key})
 
 
