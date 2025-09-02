@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions
-from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.response import Response
 
 from .serializers import UserSerializer, UserRegisterSerializer
 
@@ -18,16 +16,8 @@ class RegisterView(generics.CreateAPIView):
 class LoginView(ObtainAuthToken):
     """POST /api/user/login/ → {"token": "..."}"""
     permission_classes = [permissions.AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
-            data=request.data,
-            context={"request": request},
-        )
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data["user"]
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({"token": token.key})
+    # Нічого не перевизначаємо: базовий клас сам валідить
+    # і повертає {"token": "<...>"} або 400 на невалідні дані.
 
 
 class MeView(generics.RetrieveUpdateAPIView):
