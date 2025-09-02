@@ -158,7 +158,7 @@ class TicketCreateSerializer(serializers.ModelSerializer):
                 {"seat": "Seat out of range for this hall."}
             )
         if Ticket.objects.filter(
-            movie_session=ms, row=row, seat=seat
+                movie_session=ms, row=row, seat=seat
         ).exists():
             raise serializers.ValidationError(
                 "This place is already taken for the session."
@@ -219,3 +219,9 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         for ticket_data in tickets_data:
             Ticket.objects.create(order=order, **ticket_data)
         return order
+
+
+class MovieSessionWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieSession
+        fields = ("id", "movie", "cinema_hall", "show_time")
